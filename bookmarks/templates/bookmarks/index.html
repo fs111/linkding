@@ -10,8 +10,17 @@
             display: none;
         }
 
+        .bulk-edit-wrapper {
+            max-height: 0;
+            margin-top: -16px;
+            margin-bottom: 16px;
+            overflow: hidden;
+            transition: all 400ms;
+        }
+
         .bulk-edit-actions {
-            display: none;
+            display: flex;
+            padding: 4px 8px;
         }
 
         .bulk-edit-actions > * {
@@ -22,8 +31,8 @@
             display: block;
         }
 
-        #bulk-edit-mode:checked ~ .bookmarks-page .bulk-edit-actions {
-            display: flex;
+        #bulk-edit-mode:checked ~ .bookmarks-page .bulk-edit-wrapper {
+            max-height: 40px;
         }
     </style>
 
@@ -49,8 +58,10 @@
 
             <form action="{% url 'bookmarks:bulk_edit' %}" method="post">
                 {% csrf_token %}
+                <div class="bulk-edit-wrapper">
+
                 <div class="bulk-edit-actions bg-gray"
-                     style="align-items: center; padding: 4px 8px; margin-top: -16px; margin-bottom: 16px; border-bottom: solid 1px #dadee4;">
+                     style="align-items: center;  border-bottom: solid 1px #dadee4;">
                     <label class="form-checkbox bulk-edit-all-toggle"
                            style="display: inline-block; margin: 0 10px 0 0px; padding: 0 0 0 0.8rem">
                         <input type="checkbox" style="display: none">
@@ -77,6 +88,8 @@
                         <option value="{{ tag.name }}">{{ tag.name }}</option>
                         {% endfor %}
                     </select>
+                </div>
+
                 </div>
 
                 {% if empty %}
