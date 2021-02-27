@@ -7,13 +7,27 @@
 
     <style>
         .bulk-edit-toggle {
-            display: none;
+            visibility: hidden;
+            opacity: 0;
+            transition: all 400ms;
+        }
+
+        .bulk-edit-all-toggle {
+            padding: 0;
+            margin: 0 22px 0 0;
+            visibility: hidden;
+            opacity: 0;
+            transition: all 400ms;
+        }
+
+        .bulk-edit-wrapper-outer {
+            margin-top: -17px;
+            margin-bottom: 16px;
+            margin-left: -30px;
         }
 
         .bulk-edit-wrapper {
             max-height: 0;
-            margin-top: -16px;
-            margin-bottom: 16px;
             overflow: hidden;
             transition: all 400ms;
         }
@@ -21,6 +35,8 @@
         .bulk-edit-actions {
             display: flex;
             padding: 4px 8px;
+            border-top: solid 1px #dadee4;
+            border-bottom: solid 1px #dadee4;
         }
 
         .bulk-edit-actions > * {
@@ -28,7 +44,13 @@
         }
 
         #bulk-edit-mode:checked ~ .bookmarks-page .bulk-edit-toggle {
-            display: block;
+            visibility: visible;
+            opacity: 1;
+        }
+
+        #bulk-edit-mode:checked ~ .bookmarks-page .bulk-edit-all-toggle {
+            visibility: visible;
+            opacity: 1;
         }
 
         #bulk-edit-mode:checked ~ .bookmarks-page .bulk-edit-wrapper {
@@ -58,12 +80,12 @@
 
             <form action="{% url 'bookmarks:bulk_edit' %}" method="post">
                 {% csrf_token %}
+                <div class="bulk-edit-wrapper-outer">
                 <div class="bulk-edit-wrapper">
 
                 <div class="bulk-edit-actions bg-gray"
-                     style="align-items: center;  border-bottom: solid 1px #dadee4;">
-                    <label class="form-checkbox bulk-edit-all-toggle"
-                           style="display: inline-block; margin: 0 10px 0 0px; padding: 0 0 0 0.8rem">
+                     style="align-items: center;">
+                    <label class="form-checkbox bulk-edit-all-toggle">
                         <input type="checkbox" style="display: none">
                         <i class="form-icon"></i>
                     </label>
@@ -90,6 +112,7 @@
                     </select>
                 </div>
 
+                </div>
                 </div>
 
                 {% if empty %}
