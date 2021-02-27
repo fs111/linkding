@@ -4,6 +4,31 @@
 {% load bookmarks %}
 
 {% block content %}
+
+    <style>
+        .bulk-edit-toggle {
+            display: none;
+        }
+
+        .bulk-edit-actions {
+            display: none;
+        }
+
+        .bulk-edit-actions > * {
+            flex: 0 0 auto;
+        }
+
+        #bulk-edit-mode:checked ~ .bookmarks-page .bulk-edit-toggle {
+            display: block;
+        }
+
+        #bulk-edit-mode:checked ~ .bookmarks-page .bulk-edit-actions {
+            display: flex;
+        }
+    </style>
+
+    <input id="bulk-edit-mode" type="checkbox" style="display: none">
+
     <div class="bookmarks-page columns">
 
         {# Bookmark list #}
@@ -12,13 +37,54 @@
                 <h2>Bookmarks</h2>
                 <div class="spacer"></div>
                 {% bookmark_search query tags %}
+                <label for="bulk-edit-mode">
+                    <div class="btn" style="margin-left: 8px" title="Bulk edit">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="20px"
+                             height="20px">
+                            <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z"/>
+                        </svg>
+                    </div>
+                </label>
             </div>
 
-            {% if empty %}
-                {% include 'bookmarks/empty_bookmarks.html' %}
-            {% else %}
-                {% bookmark_list bookmarks return_url %}
-            {% endif %}
+            <form action="{% url 'bookmarks:bulk_edit' %}" method="post">
+                {% csrf_token %}
+                <div class="bulk-edit-actions bg-gray"
+                     style="align-items: center; padding: 4px 8px; margin-top: -16px; margin-bottom: 16px; border-bottom: solid 1px #dadee4;">
+                    <label class="form-checkbox bulk-edit-all-toggle"
+                           style="display: inline-block; margin: 0 10px 0 0px; padding: 0 0 0 0.8rem">
+                        <input type="checkbox" style="display: none">
+                        <i class="form-icon"></i>
+                    </label>
+                    <button type="submit" name="bulk_archive" class="btn btn-link btn-sm btn-confirmation" style="padding: 0;">Archive
+                    </button>
+                    <span class="text-primary" style="margin: 0 4px;">•</span>
+                    <button type="submit" name="bulk_delete" class="btn btn-link btn-sm btn-confirmation" style="padding: 0;">Delete
+                    </button>
+                    <span class="text-primary" style="margin: 0 4px;">•</span>
+                    <button type="submit" name="bulk_tag" class="btn btn-link btn-sm" style="padding: 0;">Tag with:
+                    </button>
+                    <select class="form-select select-sm" style="width: auto; margin-left: 4px;">
+                        {% for tag in tags %}
+                        <option value="{{ tag.name }}">{{ tag.name }}</option>
+                        {% endfor %}
+                    </select>
+                    <span class="text-primary" style="margin: 0 4px;">•</span>
+                    <button type="submit" name="bulk_untag" class="btn btn-link btn-sm" style="padding: 0;">Remove tag:
+                    </button>
+                    <select class="form-select select-sm" style="width: auto; margin-left: 4px;">
+                        {% for tag in tags %}
+                        <option value="{{ tag.name }}">{{ tag.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                {% if empty %}
+                    {% include 'bookmarks/empty_bookmarks.html' %}
+                {% else %}
+                    {% bookmark_list bookmarks return_url %}
+                {% endif %}
+            </form>
         </section>
 
         {# Tag list #}
@@ -31,4 +97,50 @@
     </div>
 
     <script src="{% static "bundle.js" %}"></script>
+    <script src="{% static "shared.js" %}"></script>
+
+    <script type="application/javascript">
+        (function () {
+            const singleToggles = document.querySelectorAll('.bulk-edit-toggle input')
+            const allToggle = document.querySelector('.bulk-edit-all-toggle input')
+
+            function isAllSelected() {
+                let result = true
+
+                singleToggles.forEach(function (toggle) {
+                    result = result && toggle.checked
+                })
+
+                return result
+            }
+
+            function selectAll() {
+                singleToggles.forEach(function (toggle) {
+                    toggle.checked = true
+                })
+            }
+
+            function deselectAll() {
+                singleToggles.forEach(function (toggle) {
+                    toggle.checked = false
+                })
+            }
+
+            // Toggle all
+            allToggle.addEventListener('change', function (e) {
+                if (e.target.checked) {
+                    selectAll()
+                } else {
+                    deselectAll()
+                }
+            })
+
+            // Toggle single
+            singleToggles.forEach(function (toggle) {
+                toggle.addEventListener('change', function () {
+                    allToggle.checked = isAllSelected()
+                })
+            })
+        })()
+    </script>
 {% endblock %}

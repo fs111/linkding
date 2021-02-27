@@ -156,5 +156,13 @@ def unarchive(request, bookmark_id: int):
 
 
 @login_required
+def bulk_edit(request):
+    print(request.POST)
+    return_url = request.GET.get('return_url')
+    return_url = return_url if return_url else reverse('bookmarks:index')
+    return HttpResponseRedirect(return_url)
+
+
+@login_required
 def close(request):
     return render(request, 'bookmarks/close.html')
