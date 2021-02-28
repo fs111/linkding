@@ -3,42 +3,40 @@
 
 <ul class="bookmark-list">
     {% for bookmark in bookmarks %}
-        <li style="display: flex; position:relative;">
-            <label class="form-checkbox bulk-edit-toggle" style="font-size: 0.7rem; position:absolute; left: -22px; top: 0rem; padding: 0; margin: 0;">
+        <li>
+            <label class="form-checkbox bulk-edit-toggle">
                 <input type="checkbox" name="bookmark_id" value="{{ bookmark.id }}">
-                <i class="form-icon" style="top: 0.2rem"></i>
+                <i class="form-icon"></i>
             </label>
-            <div style="min-width: 0">
-                <div class="title truncate">
-                    <a href="{{ bookmark.url }}" target="_blank" rel="noopener">{{ bookmark.resolved_title }}</a>
-                </div>
-                <div class="description truncate">
-                    {% if bookmark.tag_names %}
-                        <span>
+            <div class="title truncate">
+                <a href="{{ bookmark.url }}" target="_blank" rel="noopener">{{ bookmark.resolved_title }}</a>
+            </div>
+            <div class="description truncate">
+                {% if bookmark.tag_names %}
+                    <span>
                             {% for tag_name in bookmark.tag_names %}
                                 <a href="?{% append_query_param q=tag_name|hash_tag %}">{{ tag_name|hash_tag }}</a>
                             {% endfor %}
                         </span>
-                    {% endif %}
-                    {% if bookmark.tag_names and bookmark.resolved_description %} | {% endif %}
+                {% endif %}
+                {% if bookmark.tag_names and bookmark.resolved_description %} | {% endif %}
 
-                    {% if bookmark.resolved_description %}
-                        <span>{{ bookmark.resolved_description }}</span>
-                    {% endif %}
-                </div>
-                <div class="actions">
-                    <a href="{% url 'bookmarks:edit' bookmark.id %}?return_url={{ return_url }}"
-                       class="btn btn-link btn-sm">Edit</a>
-                    {% if bookmark.is_archived %}
-                        <a href="{% url 'bookmarks:unarchive' bookmark.id %}?return_url={{ return_url }}"
-                           class="btn btn-link btn-sm">Unarchive</a>
-                    {% else %}
-                        <a href="{% url 'bookmarks:archive' bookmark.id %}?return_url={{ return_url }}"
-                           class="btn btn-link btn-sm">Archive</a>
-                    {% endif %}
-                    <a href="{% url 'bookmarks:remove' bookmark.id %}?return_url={{ return_url }}"
-                       class="btn btn-link btn-sm btn-confirmation">Remove</a>
-                </div>
+                {% if bookmark.resolved_description %}
+                    <span>{{ bookmark.resolved_description }}</span>
+                {% endif %}
+            </div>
+            <div class="actions">
+                <a href="{% url 'bookmarks:edit' bookmark.id %}?return_url={{ return_url }}"
+                   class="btn btn-link btn-sm">Edit</a>
+                {% if bookmark.is_archived %}
+                    <a href="{% url 'bookmarks:unarchive' bookmark.id %}?return_url={{ return_url }}"
+                       class="btn btn-link btn-sm">Unarchive</a>
+                {% else %}
+                    <a href="{% url 'bookmarks:archive' bookmark.id %}?return_url={{ return_url }}"
+                       class="btn btn-link btn-sm">Archive</a>
+                {% endif %}
+                <a href="{% url 'bookmarks:remove' bookmark.id %}?return_url={{ return_url }}"
+                   class="btn btn-link btn-sm btn-confirmation">Remove</a>
             </div>
         </li>
     {% endfor %}

@@ -5,60 +5,7 @@
 
 {% block content %}
 
-    <style>
-        .bulk-edit-toggle {
-            visibility: hidden;
-            opacity: 0;
-            transition: all 400ms;
-        }
-
-        .bulk-edit-all-toggle {
-            padding: 0;
-            margin: 0 22px 0 0;
-            visibility: hidden;
-            opacity: 0;
-            transition: all 400ms;
-        }
-
-        .bulk-edit-wrapper-outer {
-            margin-top: -17px;
-            margin-bottom: 16px;
-            margin-left: -30px;
-        }
-
-        .bulk-edit-wrapper {
-            max-height: 0;
-            overflow: hidden;
-            transition: all 400ms;
-        }
-
-        .bulk-edit-actions {
-            display: flex;
-            padding: 4px 8px;
-            border-top: solid 1px #dadee4;
-            border-bottom: solid 1px #dadee4;
-        }
-
-        .bulk-edit-actions > * {
-            flex: 0 0 auto;
-        }
-
-        #bulk-edit-mode:checked ~ .bookmarks-page .bulk-edit-toggle {
-            visibility: visible;
-            opacity: 1;
-        }
-
-        #bulk-edit-mode:checked ~ .bookmarks-page .bulk-edit-all-toggle {
-            visibility: visible;
-            opacity: 1;
-        }
-
-        #bulk-edit-mode:checked ~ .bookmarks-page .bulk-edit-wrapper {
-            max-height: 40px;
-        }
-    </style>
-
-    <input id="bulk-edit-mode" type="checkbox" style="display: none">
+    <input id="bulk-edit-mode" type="checkbox">
 
     <div class="bookmarks-page columns">
 
@@ -69,50 +16,42 @@
                 <div class="spacer"></div>
                 {% bookmark_search query tags %}
                 <label for="bulk-edit-mode">
-                    <div class="btn" style="margin-left: 8px" title="Bulk edit">
+                    <span class="btn" title="Bulk edit">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="20px"
                              height="20px">
                             <path d="M7 3a1 1 0 000 2h6a1 1 0 100-2H7zM4 7a1 1 0 011-1h10a1 1 0 110 2H5a1 1 0 01-1-1zM2 11a2 2 0 012-2h12a2 2 0 012 2v4a2 2 0 01-2 2H4a2 2 0 01-2-2v-4z"/>
                         </svg>
-                    </div>
+                    </span>
                 </label>
             </div>
 
-            <form action="{% url 'bookmarks:bulk_edit' %}" method="post">
+            <form class="bulk-edit-form" action="{% url 'bookmarks:bulk_edit' %}" method="post">
                 {% csrf_token %}
-                <div class="bulk-edit-wrapper-outer">
-                <div class="bulk-edit-wrapper">
-
-                <div class="bulk-edit-actions bg-gray"
-                     style="align-items: center;">
-                    <label class="form-checkbox bulk-edit-all-toggle">
-                        <input type="checkbox" style="display: none">
-                        <i class="form-icon"></i>
-                    </label>
-                    <button type="submit" name="bulk_archive" class="btn btn-link btn-sm btn-confirmation" style="padding: 0;">Archive
-                    </button>
-                    <span class="text-primary" style="margin: 0 4px;">•</span>
-                    <button type="submit" name="bulk_delete" class="btn btn-link btn-sm btn-confirmation" style="padding: 0;">Delete
-                    </button>
-                    <span class="text-primary" style="margin: 0 4px;">•</span>
-                    <button type="submit" name="bulk_tag" class="btn btn-link btn-sm" style="padding: 0;">Tag with:
-                    </button>
-                    <select class="form-select select-sm" style="width: auto; margin-left: 4px;">
-                        {% for tag in tags %}
-                        <option value="{{ tag.name }}">{{ tag.name }}</option>
-                        {% endfor %}
-                    </select>
-                    <span class="text-primary" style="margin: 0 4px;">•</span>
-                    <button type="submit" name="bulk_untag" class="btn btn-link btn-sm" style="padding: 0;">Remove tag:
-                    </button>
-                    <select class="form-select select-sm" style="width: auto; margin-left: 4px;">
-                        {% for tag in tags %}
-                        <option value="{{ tag.name }}">{{ tag.name }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-
-                </div>
+                <div class="bulk-edit-bar">
+                    <div class="bulk-edit-actions bg-gray">
+                        <label class="form-checkbox bulk-edit-all-toggle">
+                            <input type="checkbox" style="display: none">
+                            <i class="form-icon"></i>
+                        </label>
+                        <button type="submit" name="bulk_archive" class="btn btn-link btn-sm btn-confirmation">Archive
+                        </button>
+                        <button type="submit" name="bulk_delete" class="btn btn-link btn-sm btn-confirmation">Delete
+                        </button>
+                        <button type="submit" name="bulk_tag" class="btn btn-link btn-sm">Tag with:
+                        </button>
+                        <select class="form-select select-sm">
+                            {% for tag in tags %}
+                            <option value="{{ tag.name }}">{{ tag.name }}</option>
+                            {% endfor %}
+                        </select>
+                        <button type="submit" name="bulk_untag" class="btn btn-link btn-sm">Remove tag:
+                        </button>
+                        <select class="form-select select-sm">
+                            {% for tag in tags %}
+                            <option value="{{ tag.name }}">{{ tag.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
                 </div>
 
                 {% if empty %}

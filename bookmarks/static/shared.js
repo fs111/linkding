@@ -4,7 +4,7 @@
         const buttonEls = document.querySelectorAll('.btn-confirmation');
 
         function showConfirmation(buttonEl) {
-            const cancelEl = document.createElement('span');
+            const cancelEl = document.createElement('button');
             cancelEl.innerText = 'Cancel';
             cancelEl.className = 'btn btn-link btn-sm btn-confirmation-action mr-1';
             cancelEl.addEventListener('click', function () {
@@ -25,6 +25,7 @@
             }
 
             const container = document.createElement('span');
+            container.className = 'confirmation'
             container.appendChild(cancelEl);
             container.appendChild(confirmEl);
             buttonEl.parentElement.insertBefore(container, buttonEl);
