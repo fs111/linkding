@@ -137,7 +137,8 @@ $bulk-edit-transition-duration: 400ms;
     > select {
       width: auto;
       margin-left: 4px;
-      max-width: 140px;
+      max-width: 130px;
+      -webkit-appearance: none;
     }
 
     span.confirmation button {
@@ -187,5 +188,5 @@ $bulk-edit-transition-duration: 400ms;
 
 #bulk-edit-mode:checked ~ .bookmarks-page .bulk-edit-bar {
   max-height: 35px;
-  border-bottom: solid 1px #dadee4;
+  border-bottom: solid 1px $border-color;
 }
