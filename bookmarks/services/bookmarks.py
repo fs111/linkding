@@ -1,3 +1,5 @@
+from typing import Union
+
 from django.contrib.auth.models import User
 from django.utils import timezone
 
@@ -46,11 +48,31 @@ def archive_bookmark(bookmark: Bookmark):
     return bookmark
 
 
+def archive_bookmarks(bookmark_ids: [Union[int, str]], current_user: User):
+    # Convert string ids to int if necessary
+    sanitized_bookmark_ids = [int(bm_id) if isinstance(bm_id, str) else bm_id for bm_id in bookmark_ids]
+
+    bookmarks = Bookmark.objects.filter(owner=current_user, id__in=sanitized_bookmark_ids)
+
+    for bookmark in bookmarks:
+        archive_bookmark(bookmark)
+
+
 def unarchive_bookmark(bookmark: Bookmark):
     bookmark.is_archived = False
     bookmark.date_modified = timezone.now()
     bookmark.save()
     return bookmark
+
+
+def unarchive_bookmarks(bookmark_ids: [Union[int, str]], current_user: User):
+    # Convert string ids to int if necessary
+    sanitized_bookmark_ids = [int(bm_id) if isinstance(bm_id, str) else bm_id for bm_id in bookmark_ids]
+
+    bookmarks = Bookmark.objects.filter(owner=current_user, id__in=sanitized_bookmark_ids)
+
+    for bookmark in bookmarks:
+        unarchive_bookmark(bookmark)
 
 
 def _merge_bookmark_data(from_bookmark: Bookmark, to_bookmark: Bookmark):

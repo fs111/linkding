@@ -25,7 +25,7 @@
                 </label>
             </div>
 
-            <form class="bulk-edit-form" action="{% url 'bookmarks:bulk_edit' %}" method="post">
+            <form class="bulk-edit-form" action="{% url 'bookmarks:bulk_edit' %}?return_url={{ return_url }}" method="post">
                 {% csrf_token %}
                 <div class="bulk-edit-bar">
                     <div class="bulk-edit-actions bg-gray">

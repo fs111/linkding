@@ -8,7 +8,8 @@ from django.urls import reverse
 
 from bookmarks import queries
 from bookmarks.models import Bookmark, BookmarkForm, build_tag_string
-from bookmarks.services.bookmarks import create_bookmark, update_bookmark, archive_bookmark, unarchive_bookmark
+from bookmarks.services.bookmarks import create_bookmark, update_bookmark, archive_bookmark, archive_bookmarks, \
+    unarchive_bookmark, unarchive_bookmarks
 
 _default_page_size = 30
 
@@ -157,7 +158,14 @@ def unarchive(request, bookmark_id: int):
 
 @login_required
 def bulk_edit(request):
-    print(request.POST)
+    bookmark_ids = request.POST.getlist('bookmark_id')
+
+    # Determine action
+    if 'bulk_archive' in request.POST:
+        archive_bookmarks(bookmark_ids, request.user)
+    if 'bulk_unarchive' in request.POST:
+        unarchive_bookmarks(bookmark_ids, request.user)
+
     return_url = request.GET.get('return_url')
     return_url = return_url if return_url else reverse('bookmarks:index')
     return HttpResponseRedirect(return_url)
