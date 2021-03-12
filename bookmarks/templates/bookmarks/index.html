@@ -25,7 +25,8 @@
                 </label>
             </div>
 
-            <form class="bulk-edit-form" action="{% url 'bookmarks:bulk_edit' %}?return_url={{ return_url }}" method="post">
+            <form class="bulk-edit-form" action="{% url 'bookmarks:bulk_edit' %}?return_url={{ return_url }}"
+                  method="post">
                 {% csrf_token %}
                 <div class="bulk-edit-bar">
                     <div class="bulk-edit-actions bg-gray">
@@ -35,22 +36,15 @@
                         </label>
                         <button type="submit" name="bulk_archive" class="btn btn-link btn-sm btn-confirmation">Archive
                         </button>
+                        <span class="text-sm text-gray-dark">•</span>
                         <button type="submit" name="bulk_delete" class="btn btn-link btn-sm btn-confirmation">Delete
                         </button>
-                        <button type="submit" name="bulk_tag" class="btn btn-link btn-sm">Tag with:
+                        <span class="text-sm text-gray-dark">•</span>
+                        <span class="text-sm text-gray-dark"><label for="bulk-edit-tags-input">Tags:</label></span>
+                        <input id="bulk-edit-tags-input" class="form-input input-sm" placeholder="&nbsp;">
+                        <button type="submit" name="bulk_tag" class="btn btn-link btn-sm">Add</button>
+                        <button type="submit" name="bulk_untag" class="btn btn-link btn-sm">Remove
                         </button>
-                        <select class="form-select select-sm">
-                            {% for tag in tags %}
-                            <option value="{{ tag.name }}">{{ tag.name }}</option>
-                            {% endfor %}
-                        </select>
-                        <button type="submit" name="bulk_untag" class="btn btn-link btn-sm">Remove tag:
-                        </button>
-                        <select class="form-select select-sm">
-                            {% for tag in tags %}
-                            <option value="{{ tag.name }}">{{ tag.name }}</option>
-                            {% endfor %}
-                        </select>
                     </div>
                 </div>
 
@@ -76,6 +70,8 @@
 
     <script type="application/javascript">
         (function () {
+            const bulkEditToggle = document.getElementById('bulk-edit-mode')
+            const bulkEditBar = document.querySelector('.bulk-edit-bar')
             const singleToggles = document.querySelectorAll('.bulk-edit-toggle input')
             const allToggle = document.querySelector('.bulk-edit-all-toggle input')
 
@@ -116,6 +112,47 @@
                     allToggle.checked = isAllSelected()
                 })
             })
+
+            // Allow overflow when bulk edit mode is active to be able to display tag auto complete menu
+            let bulkEditToggleTimeout
+            if (bulkEditToggle.checked) {
+                bulkEditBar.style.overflow = 'visible';
+            }
+            bulkEditToggle.addEventListener('change', function (e) {
+                if (bulkEditToggleTimeout) {
+                    clearTimeout(bulkEditToggleTimeout);
+                    bulkEditToggleTimeout = null;
+                }
+                if (e.target.checked) {
+                    bulkEditToggleTimeout = setTimeout(function () {
+                        bulkEditBar.style.overflow = 'visible';
+                    }, 500);
+                } else {
+                    bulkEditBar.style.overflow = 'hidden';
+                }
+            });
+
+            // Init tag auto-complete
+            function initTagAutoComplete() {
+                const wrapper = document.createElement('div');
+                const tagInput = document.getElementById('bulk-edit-tags-input');
+                const apiClient = new linkding.ApiClient('{% url 'bookmarks:api-root' %}')
+
+                new linkding.TagAutoComplete({
+                    target: wrapper,
+                    props: {
+                        id: 'bulk-edit-tags-input',
+                        name: 'tags',
+                        value: tagInput.value,
+                        apiClient: apiClient,
+                        variant: 'small'
+                    }
+                });
+
+                tagInput.parentElement.replaceChild(wrapper, tagInput);
+            }
+
+            initTagAutoComplete();
         })()
     </script>
 {% endblock %}
