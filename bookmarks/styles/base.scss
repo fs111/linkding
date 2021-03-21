@@ -40,7 +40,7 @@ h2 {
 }
 
 // Button color should not change for anchor elements
-.btn:visited:not(.btn-primary) {
+.btn-link:visited:not(.btn-primary) {
   color: $primary-color;
 }
 
@@ -57,4 +57,20 @@ h2 {
 // Override border color for tab block
 .tab-block {
   border-bottom: solid 1px $border-color;
+}
+
+// Form auto-complete menu
+.form-autocomplete .menu {
+  .menu-item.selected > a {
+    background: #f1f1fc;
+    color: #5755d9;
+  }
+
+  .group-item, .group-item:hover {
+    color: #999999;
+    text-transform: uppercase;
+    background: none;
+    font-size: 0.6rem;
+    font-weight: bold;
+  }
 }

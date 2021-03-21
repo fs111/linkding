@@ -1,0 +1,121 @@
+/* Dark mode */
+@media (prefers-color-scheme: dark) {
+  body {
+    background: $dt-background-color;
+    color: $dt-body-font-color;
+  }
+
+  h2 {
+    color: darken($dt-body-font-color, 5%);
+  }
+
+  a {
+    color: $dt-link-color;
+    &:hover,&:focus,&:active {
+      color: $dt-link-color;
+    }
+    &:visited {
+      color: $dt-link-color-light;
+    }
+  }
+
+  .btn.btn-primary {
+    background: #4442a6;
+    border-color: darken(#4442a6, 5%);
+    color: #f1f1f1;
+
+    &:hover{
+      background: darken(#4442a6, 5%);
+      border-color: darken(#4442a6, 10%);
+    }
+  }
+
+  .btn, .btn.input-group-btn {
+    background: $dt-background-color;
+    color: $dt-primary-color;
+    border-color: $dt-primary-color;
+
+    &:hover {
+      background: $dt-background-color-light;
+      border-color: $dt-primary-color;
+    }
+  }
+
+  .btn.btn-link {
+    color: $dt-primary-color;
+    background-color: transparent;
+    border-color: transparent;
+    &:visited {
+      color: $dt-primary-color;
+    }
+    &:hover,&:focus,&:active {
+      color: darken($dt-primary-color, 5%);
+    }
+  }
+
+  .form-input, .form-autocomplete .form-autocomplete-input.form-input {
+    background: $dt-background-color-light;
+    //background: $dt-background-color;
+    border-color: $dt-border-color;
+    //color: $dt-body-font-color;
+    color: $dt-body-font-color-light;
+
+    &:focus, &.is-focused {
+      border-color: $dt-primary-color;
+      box-shadow: 0 0 0 .1rem rgba($dt-primary-color, .3);
+    }
+  }
+
+  .form-autocomplete .menu {
+    background: $dt-background-color-light;
+
+    .menu-item > a {
+      color: $dt-body-font-color-light;
+    }
+
+    .menu-item.selected > a, .menu-item:hover > a {
+      background: lighten($dt-background-color-light, 10%);
+      color: $dt-primary-color;
+    }
+  }
+
+  /* Bookmarks */
+  ul.bookmark-list {
+    .description {
+      color: $dt-body-font-color;
+      a {
+        color: $dt-alternative-color;
+      }
+    }
+
+    .actions .btn-link {
+      color: #808aa4;
+
+      &:focus,
+      &:hover,
+      &:active,
+      &.active {
+        color: lighten(#808aa4, 10%);
+      }
+    }
+  }
+
+  .tag-cloud {
+
+    a {
+      color: $dt-alternative-color;
+    }
+
+    .highlight-char {
+      color: $dt-alternative-color-dark;
+    }
+  }
+
+    /* Shared */
+  section.content-area {
+
+    .content-area-header {
+      border-bottom: solid 1px $dt-border-color;
+    }
+  }
+}

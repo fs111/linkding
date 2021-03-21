@@ -8,6 +8,32 @@ $html-font-size: 18px !default;
 $alternative-color: #05a6a3;
 $alternative-color-dark: darken($alternative-color, 5%);
 
+//$dt-primary-color: #c3b9fd;
+//$dt-primary-color: #a197ea;
+$o-color: hsl(241, 63%, 49%);
+$dt-primary-color: hsl(241, 90%, 83%);
+$dt-primary-color: #bcbcff;
+//$dt-alternative-color: #12bebb;
+//$dt-alternative-color: #7dc8c6;
+$dt-alternative-color: #64c6c3;
+$dt-alternative-color-dark: lighten($alternative-color, 10%);
+
+//$dt-background-color: #222222;
+$dt-background-color: #15151d;
+$dt-background-color-light: lighten($dt-background-color, 5%);
+$dt-border-color: #7a7a7a;
+
+$dt-body-font-color: #b7b7b7;
+$dt-body-font-color-light: lighten($dt-body-font-color, 15%);
+
+$dt-gray-color: #8f9cbf;
+$dt-gray-color-dark: lighten($dt-gray-color, 10%);
+
+
+$dt-link-color: $dt-primary-color;
+$dt-link-color-light: $dt-link-color;
+//$dt-link-color-light: lighten($dt-primary-color, 8%);
+
 // Import Spectre CSS lib
 @import "../../node_modules/spectre.css/src/spectre";
 @import "../../node_modules/spectre.css/src/autocomplete";
@@ -25,3 +51,4 @@ $alternative-color-dark: darken($alternative-color, 5%);
 @import "bookmarks";
 @import "settings";
 @import "auth";
+@import "dark";
